@@ -1,0 +1,65 @@
+
+//初期データセット クラスタごとに配列として与える
+let clusters = [
+    [2,4,10],
+    [6,12,14]
+];
+
+//重心計算 戻り値はクラスタごとの重心の配列
+const calcCenter = (clts)=>{
+    const ret=new Array();
+    clts.forEach(clt => {
+        ret.push(
+            clt.reduce((a,x)=>{return a+x}) / clt.length
+        );
+    });
+    return ret;
+}
+const distance = (a,b)=>{
+    return (a-b)*(a-b);
+};
+
+//最も近い重心のクラスタへラベルを書き換え 戻り値は新しいクラスタs
+const rewriteClusterLabel =(clts)=>{
+    const centers =calcCenter(clts);
+    let clts_new =new Array(clts.length);
+
+    clts.flat().forEach(data=>{
+        let minDist =-1;
+        let minLabel=0;
+        centers.forEach((center,label)=>{   //最も近い重心を求める
+            const dist = distance(data,center)
+            if( dist<minDist || minDist==-1 ){
+                minDist = dist;
+                minLabel=label;
+            }
+        });
+        if(clts_new[minLabel]==undefined)
+            clts_new[minLabel] =new Array();
+
+        clts_new[minLabel].push(data); //求めたクラスタにpush
+    });
+
+    //あとでJson.stringify(clusters)で比較できるように、配列をソートしておく
+    clts_new.forEach(clt=>{
+        clt.sort((a,b)=>{return a-b});
+    });
+    clts_new.sort((a,b)=>{return a-b});
+    
+    return clts_new;
+};
+console.log("初期データセット");
+console.log(clusters);
+
+let clts_old = clusters;
+let clts;
+
+while(1){
+    clts = rewriteClusterLabel(clts_old); 
+    if(JSON.stringify(clts_old)===JSON.stringify(clts)){
+        break; //クラスタの割当に変化がなければ終了
+    }
+    clts_old = clts;
+}
+console.log("K-means法適用後")
+console.log(clts);

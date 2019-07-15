@@ -4,12 +4,13 @@
 
 ## 実行方法
 ```
-$ git
+$ git clone https://github.com/basd4g/clustering.AI.2019.SU.git
+$ cd clustering.AI.2019.SU
 $ node ./index.js
 ```
 
 ## 環境
-依存: node.js
+依存: node.js  
 バージョン: v12.6.0
 
 ## 各ファイルについて
@@ -28,7 +29,7 @@ $ node ./index.js > result.txt
 ```
 
 ## プログラムの流れ
-- 初期データセットを let clustersに与える。
+- 初期データセットをclustersに与える。
 - K-means法の適用
 rewriteClusterLabel()でクラスタの重心計算を行い、最も近い重心のクラスタラベルに書き換える
 これをクラスタの割当に変化がなくなるまで繰り返し行う
